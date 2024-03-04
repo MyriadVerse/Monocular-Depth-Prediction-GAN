@@ -1,6 +1,6 @@
 # 基于生成对抗网络的单张图像深度信息恢复方法
 
-本仓库实现了基本的训练和测试代码，并应当可以在 `PyTorch2.2.0 + cu118 + python3.9` 的环境下运行，可能还需要 `scipy`, `torchvision`, `numpy`, `opencv_python`, `Pillow` 等
+本仓库实现了基本的训练和测试代码，并应当可以在 `PyTorch2.2.0 + cu118 + python3.9` 的环境下运行，可能还需要 `scipy`, `torchvision`, `numpy`, `opencv_python`, `Pillow`，`matplotlib` 等
 ## 训练
 
 可以通过指定数据集目录、模型名称、架构、网络等参数来训练模型：
@@ -42,7 +42,7 @@ python evaluate.py --data_dir dataset/ --predicted_disp_path output/disparities_
 
 ## 数据
 
-使用了两个数据集：KITTI 和 CityScapes
+使用了两个数据集：KITTI 和 CityScapes，由于初始数据集是 png 格式，故训练前可使用 [png2jpg](utils/png2jpg.py) 脚本转换为 jpg 格式
 
 ### [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php)
 
