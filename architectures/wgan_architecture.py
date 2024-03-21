@@ -58,6 +58,8 @@ class WGanArchitecture(BaseArchitecture):
         passes = int(math.floor(n_img / self.args.batch_size / (self.critic_iters + 1)))
 
         for i in range(passes):
+            if i % 100 == 0:
+                print("Now run_epoch has been executed " + str(i) + "times")
             self.optimize_parameters()
         # 估计每张图像的损失
         loss_divider = int(math.floor(n_img / (self.critic_iters + 1)))

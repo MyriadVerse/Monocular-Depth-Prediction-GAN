@@ -64,10 +64,12 @@ def train(args):
 
         # 更新学习率
         model.update_learning_rate(epoch, args.learning_rate)
+        print("learning rate updated")
 
         c_time = time.time()
         model.to_train()
         model.set_new_loss_item(epoch)  # 设置新的损失项
+        print("new loss has been set")
 
         # 运行一个训练周期
         model.run_epoch(epoch, n_img)
