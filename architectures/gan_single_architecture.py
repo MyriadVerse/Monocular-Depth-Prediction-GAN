@@ -82,7 +82,7 @@ class GanSingleArchitecture(BaseArchitecture):
         # 计算生成器的对抗损失
         pred_fake = self.D(self.fake_right)
         self.loss_G_GAN = self.criterionGAN(pred_fake, True)
-        # 计算视差损失
+        # 计算重建损失
         self.loss_G_MonoDepth = self.criterion(self.disps, [self.left, self.right])
 
         # 将对抗损失和视差损失加权求和作为总体损失
