@@ -2,7 +2,7 @@ import torch
 from .base_generator_loss import BaseGeneratorLoss
 
 
-class MonodepthLoss(BaseGeneratorLoss):
+class MonoganLoss(BaseGeneratorLoss):
     def __init__(self, args):
         super().__init__(args)
         # SSIM loss权重

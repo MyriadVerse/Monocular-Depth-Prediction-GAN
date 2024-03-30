@@ -164,7 +164,7 @@ def define_G(args):
 
 def define_generator_loss(args):
     if args.generator_loss == "monodepth":
-        loss = MonodepthLoss(args)
+        loss = MonoganLoss(args)
     else:
         raise NotImplementedError(
             "Generator loss {} is not implemented".format(args.generator_loss)

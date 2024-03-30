@@ -136,6 +136,13 @@ class MainOptions(BaseOptions):
             help="back-passes of the G, D resp. default: 0,0",
             default=[0, 0],
         )
+        # 每训练生成器一定次数后再更新判别器
+        parser.add_argument(
+            "--k",
+            type=int,
+            help=" the ratio between the number of training iterations performed on G and those on D",
+            default=5,
+        )
 
         parser.add_argument(
             "--postprocessing",

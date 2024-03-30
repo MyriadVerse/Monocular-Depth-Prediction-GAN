@@ -31,6 +31,9 @@ class GanSingleArchitecture(BaseArchitecture):
             self.optimizer_G = optim.Adam(self.G.parameters(), lr=args.learning_rate)
             self.optimizer_D = optim.SGD(self.D.parameters(), lr=args.learning_rate)
 
+            self.k = args.k
+            self.update_count = 0
+
         # 根据模式加载正确的网络
         if args.mode == "train":
             self.model_names = ["G", "D"]
@@ -95,16 +98,20 @@ class GanSingleArchitecture(BaseArchitecture):
         self.forward()
 
         # 更新 D
-        self.set_requires_grad(self.D, True)
-        self.optimizer_D.zero_grad()
-        self.backward_D()
-        self.optimizer_D.step()
+        if self.update_count % self.k == 0:
+            self.set_requires_grad(self.D, True)
+            self.optimizer_D.zero_grad()
+            self.backward_D()
+            self.optimizer_D.step()
 
         # 更新 G
         self.set_requires_grad(self.D, False)
         self.optimizer_G.zero_grad()
         self.backward_G()
         self.optimizer_G.step()
+
+        # 更新生成器计数器
+        self.update_count += 1
 
     def update_learning_rate(self, epoch, learning_rate):
         if self.args.adjust_lr:
