@@ -84,7 +84,7 @@ class MainOptions(BaseOptions):
             "--discriminator_w",
             type=float,
             help="discriminator loss weight",
-            default=0.5,
+            default=0.0001,
         )
         parser.add_argument(
             "--do_augmentation",
