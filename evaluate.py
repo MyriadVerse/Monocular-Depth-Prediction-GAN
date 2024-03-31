@@ -10,18 +10,18 @@ matplotlib.use("TkAgg")  # 使用 TkAgg 后端
 import matplotlib.pyplot as plt
 
 
-def save_depth_rgb_image(depth_map, file_path):
-    # 将深度图的值映射到 0 到 1 之间
-    normalized_depth_map = (depth_map - np.min(depth_map)) / (
-        np.max(depth_map) - np.min(depth_map)
-    )
+# def save_depth_rgb_image(depth_map, file_path):
+#     # 将深度图的值映射到 0 到 1 之间
+#     normalized_depth_map = (depth_map - np.min(depth_map)) / (
+#         np.max(depth_map) - np.min(depth_map)
+#     )
 
-    # 使用伪彩色映射将深度值映射到 RGB 空间
-    colormap = plt.cm.jet  # 选择伪彩色映射，可以根据需要选择不同的 colormap
-    depth_rgb = (colormap(normalized_depth_map)[:, :, :3] * 255).astype(np.uint8)
+#     # 使用伪彩色映射将深度值映射到 RGB 空间
+#     colormap = plt.cm.jet  # 选择伪彩色映射，可以根据需要选择不同的 colormap
+#     depth_rgb = (colormap(normalized_depth_map)[:, :, :3] * 255).astype(np.uint8)
 
-    # 保存 RGB 图像
-    cv2.imwrite(file_path, cv2.cvtColor(depth_rgb, cv2.COLOR_RGB2BGR))
+#     # 保存 RGB 图像
+#     cv2.imwrite(file_path, cv2.cvtColor(depth_rgb, cv2.COLOR_RGB2BGR))
 
 
 def evaluate_eigen(args, verbose=True):
@@ -129,7 +129,10 @@ def evaluate_eigen(args, verbose=True):
 
         if i % 100 == 0:
             # 创建输出文件夹
-            output_folder = os.path.join("output", "image")
+            model_name = os.path.splitext(os.path.basename(args.predicted_disp_path))[
+                0
+            ].split("_", 1)[-1]
+            output_folder = os.path.join("output", "image_{}".format(model_name))
             os.makedirs(output_folder, exist_ok=True)
 
             # 加载原始图像
