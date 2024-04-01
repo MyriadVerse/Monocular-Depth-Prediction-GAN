@@ -3,7 +3,7 @@ from PIL import Image
 import time
 
 # 原始PNG图片存储路径
-png_root = "dataset/"
+png_root = "E://毕设//Monocular-Depth-Prediction-GAN//dataset//disparity//train"
 
 # 遍历所有子文件夹和文件
 for root, dirs, files in os.walk(png_root):
@@ -19,3 +19,4 @@ for root, dirs, files in os.walk(png_root):
                 # # 将PNG图片保存为JPG格式
                 img.convert("RGB").save(jpg_path)
                 os.remove(png_path)
+print("finish")
