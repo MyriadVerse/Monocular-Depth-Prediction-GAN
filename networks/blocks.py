@@ -334,3 +334,58 @@ class FuseBlock(nn.Module):
 
     def forward(self, x):
         return self.fuse_conv(x)
+
+
+class Self_Attn(nn.Module):
+    """Self attention Layer"""
+
+    def __init__(self, in_dim, activation):
+        super(Self_Attn, self).__init__()
+        self.chanel_in = in_dim
+        self.activation = activation
+
+        # 定义查询、键、值的卷积层
+        self.query_conv = nn.Conv2d(
+            in_channels=in_dim, out_channels=in_dim // 8, kernel_size=1
+        )
+        self.key_conv = nn.Conv2d(
+            in_channels=in_dim, out_channels=in_dim // 8, kernel_size=1
+        )
+        self.value_conv = nn.Conv2d(
+            in_channels=in_dim, out_channels=in_dim, kernel_size=1
+        )
+        self.gamma = nn.Parameter(torch.zeros(1))
+
+        self.softmax = nn.Softmax(dim=-1)  # 注意力权重的 softmax
+
+    def forward(self, x):
+        """
+        inputs :
+            x : input feature maps( B X C X W X H)
+        returns :
+            out : self attention value + input feature
+            attention: B X N X N (N is Width*Height)
+        """
+        m_batchsize, C, width, height = x.size()
+        # 通过查询、键、值卷积层获取查询、键、值
+        proj_query = (
+            self.query_conv(x).view(m_batchsize, -1, width * height).permute(0, 2, 1)
+        )  # B X CX(N)
+        proj_key = self.key_conv(x).view(
+            m_batchsize, -1, width * height
+        )  # B X C x (*W*H)
+        # 计算能量分数
+        energy = torch.bmm(proj_query, proj_key)  # transpose check
+        # 计算注意力权重
+        attention = self.softmax(energy)  # BX (N) X (N)
+        proj_value = self.value_conv(x).view(
+            m_batchsize, -1, width * height
+        )  # B X C X N
+
+        # 计算自注意力值
+        out = torch.bmm(proj_value, attention.permute(0, 2, 1))
+        out = out.view(m_batchsize, C, width, height)
+
+        # 加权融合输入特征和自注意力值，并应用缩放参数 gamma
+        out = self.gamma * out + x
+        return out, attention
